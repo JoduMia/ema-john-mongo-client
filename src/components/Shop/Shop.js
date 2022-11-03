@@ -6,11 +6,25 @@ import Product from '../Product/Product';
 import './Shop.css';
 
 const Shop = () => {
-    const { products, count } = useLoaderData();
+    const [products, setProducts] = useState([]);
+    const [count, setCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [dataPerpage, setDataPerpage] = useState(10);
     const totalPages = Math.ceil(count / dataPerpage);
     const [cart, setCart] = useState([]);
+
+    useEffect(() => {
+        fetch(`http://localhost:5000/products/?page=${currentPage}&size=${dataPerpage}`)
+        .then(res => res.json())
+        .then(data => {
+            setCount(data.count);
+            setProducts(data.products);
+            console.log(data);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    },[currentPage, dataPerpage])
 
     const clearCart = () => {
         setCart([]);
