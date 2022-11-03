@@ -1,11 +1,9 @@
 // use local storage to manage cart data
 const addToDb = id =>{
     let shoppingCart = {};
-    console.log(id);
 
     //get the shopping cart from local storage
     const storedCart = localStorage.getItem('shopping-cart');
-    console.log(storedCart);
     if(storedCart){
         shoppingCart = JSON.parse(storedCart);
     }

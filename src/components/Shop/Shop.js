@@ -19,10 +19,8 @@ const Shop = () => {
         .then(data => {
             setCount(data.count);
             setProducts(data.products);
-            console.log(data);
         })
         .catch(error => {
-            console.log(error);
         })
     },[currentPage, dataPerpage])
 
@@ -33,20 +31,36 @@ const Shop = () => {
 
     useEffect(() => {
         const storedCart = getStoredCart();
+        const ids = Object.keys(storedCart);
         const savedCart = [];
-        for (const id in storedCart) {
-            const addedProduct = products.find(product => product._id === id);
-            if (addedProduct) {
-                const quantity = storedCart[id];
-                addedProduct.quantity = quantity;
-                savedCart.push(addedProduct);
+
+        fetch(`http://localhost:5000/productsByIds`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(ids)
+        })
+        .then(res => res.json())
+        .then(storedProduct => {
+            for (const id in storedCart) {
+                const addedProduct = storedProduct.find(product => product._id === id);
+                if (addedProduct) {
+                    const quantity = storedCart[id];
+                    addedProduct.quantity = quantity;
+                    savedCart.push(addedProduct);
+                }
             }
-        }
-        setCart(savedCart);
-    }, [products])
+            setCart(savedCart);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+
+
+    }, [])
 
     const handleAddToCart = (selectedProduct) => {
-        console.log(selectedProduct);
         let newCart = [];
         const exists = cart.find(product => product._id === selectedProduct._id);
         if (!exists) {
@@ -81,15 +95,15 @@ const Shop = () => {
                         [...Array(totalPages).keys()].map(num => (
                             <button
                             onClick={() => setCurrentPage(num)}
-                            className={currentPage === num && 'currentPages'}
+                            className={currentPage === num ? 'currentPages' : undefined}
                             key={num}>{num}</button>
                         ))
                     }
                     <button onClick={() => setCurrentPage(currentPage+1)} disabled={currentPage === totalPages-1 && true}>Next</button>
 
-                    <select onChange={e => setDataPerpage(e.target.value)}>
+                    <select defaultValue={10} onChange={e => setDataPerpage(e.target.value)}>
                         <option value="5">5</option>
-                        <option value="10" selected>10</option>
+                        <option value="10">10</option>
                         <option value="15">15</option>
                         <option value="20">20</option>
                     </select>
