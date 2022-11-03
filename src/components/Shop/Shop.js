@@ -72,6 +72,13 @@ const Shop = () => {
                         ))
                     }
                     <button onClick={() => setCurrentPage(currentPage+1)} disabled={currentPage === totalPages-1 && true}>Next</button>
+
+                    <select onChange={e => setDataPerpage(e.target.value)}>
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
                 </div>
             </div>
             <div className="cart-container">
