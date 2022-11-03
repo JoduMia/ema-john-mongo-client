@@ -11,6 +11,19 @@
 .cart-container{
     background-color: rgba(255, 153, 0, 0.3);
 }
+
+.center {
+    text-align: center;
+}
+.center button {
+    padding: 3px;
+    margin: 2px;
+}
+
+.currentPages {
+    background-color: goldenrod;
+    width: 30px;
+}
 @media screen and (max-width:1100px) {
     .products-container{
         grid-template-columns: repeat(2, 1fr);
